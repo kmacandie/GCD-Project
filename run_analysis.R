@@ -4,7 +4,7 @@ if(!require("reshape2")){
 }
 
 #load 'share2' package (to allow use of 'melt' and 'dcast') 
-library("reshape2")
+library("reshape2", quietly=TRUE)
 
 #check for zip file
 if (!file.exists("./UCI HAR Dataset.zip")) {
