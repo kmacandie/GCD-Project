@@ -6,6 +6,18 @@ if(!require("reshape2")){
 #load 'share2' package (to allow use of 'melt' and 'dcast') 
 library("reshape2")
 
+#check for zip file
+if (!file.exists("./UCI HAR Dataset.zip")) {
+    stop("Please make sure the file 'UCI HAR Dataset.zip' is in the working directory")
+}
+
+writeLines("Unzipping zip file...")
+
+#unzip zip file
+unzip("./UCI HAR Dataset.zip")
+
+writeLines("Importing data files. Please be patient: this may take a few minutes...")
+
 # import test files
 test_subjects <- read.table("./UCI HAR Dataset/test/subject_test.txt")
 test_activities <- read.table("./UCI HAR Dataset/test/y_test.txt")
@@ -19,6 +31,8 @@ train_data <- read.table("./UCI HAR Dataset/train/X_train.txt", nrows=7352)
 # import additional files used for naming
 activity_labels <- read.table("./UCI HAR Dataset/activity_labels.txt")
 features <- read.table("./UCI HAR Dataset/features.txt")
+
+writeLines("Processing data...")
 
 # rename columns
 colnames(test_subjects) <- "subject"
@@ -61,6 +75,10 @@ molten_df <- melt(complete_df, id=c("subject", "activity"))
 # generate means in final tidied data frame
 tidied_df <- dcast(molten_df, subject + activity ~ variable, mean)
 
+writeLines("Generating output file...")
+
 # generate .txt file
 write.table(tidied_df, "./tidy.txt")
+
+writeLines("Process complete.  Tidied data is in 'tidy.txt' in working directory.")
 
